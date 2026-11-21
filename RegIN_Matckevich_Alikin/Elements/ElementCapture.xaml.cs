@@ -24,5 +24,10 @@ namespace RegIN_Matckevich_Alikin.Elements
         {
             InitializeComponent();
         }
+
+        private void EnterCapture(object sender, KeyEventArgs e)
+        {
+
+        }
     }
 }
