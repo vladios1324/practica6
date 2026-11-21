@@ -41,7 +41,7 @@ namespace RegIN_Matckevich_Alikin.Classes
             MySqlConnection.ClearPool(mySqlConnection);
         }
 
-        public static bool OOpenConnection(MySqlConnection mySqlConnection)
+        public static bool OpenConnection(MySqlConnection mySqlConnection)
         {
             return mySqlConnection != null && mySqlConnection.State == System.Data.ConnectionState.Open;
         }

@@ -15,10 +15,10 @@ namespace RegIN_Matckevich_Alikin.Classes
             var smtpClient = new SmtpClient("smtp.yandex.ru")
             {
                 Port = 587,
-                Credentials = new NetworkCredential("yandex@yandex.ru", "password"),
+                Credentials = new NetworkCredential("h4tache@yandex.ru", "password"),
                 EnableSsl = true
             };
-            smtpClient.Send("landaxe@yandex.ru", To, "Проект RegIn", Message);
+            smtpClient.Send("h4tache@yandex.ru", To, "Проект RegIn", Message);
         }
     }
 }
