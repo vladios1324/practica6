@@ -35,7 +35,7 @@
                 <Label x:Name="LTitle"
                        Margin="10,137,10,0"
                        HorizontalContentAlignment="Center"
-                       Content="Pin 4"
+                       Content="Введите Пин-код"
                        VerticalAlignment="Top"/>
                 <Label Content="Введите PIN-код"
                        Margin="10,161,10,0"

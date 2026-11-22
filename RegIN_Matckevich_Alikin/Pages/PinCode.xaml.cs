@@ -1,18 +1,8 @@
 ﻿using RegIN_Matckevich_Alikin.Classes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace RegIN_Matckevich_Alikin.Pages
 {
@@ -23,6 +13,7 @@ namespace RegIN_Matckevich_Alikin.Pages
     {
         public const int MaxAttempts = 3;
         public static int FailedAttempts = 0;
+        static readonly bool RequireEmailCode = true;
         public enum TypePin
         {
             Create,
@@ -67,6 +58,11 @@ namespace RegIN_Matckevich_Alikin.Pages
             {
                 FailedAttempts = 0;
                 MessageBox.Show("PIN успешно введен.");
+
+                if (RequireEmailCode)
+                    MainWindow.mainWindow.OpenPage(new Confirmation(Confirmation.TypeConfirmation.Login));
+                else 
+                    MessageBox.Show("Вы успешно вошли в систему.");
             }
             else
             {
