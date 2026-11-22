@@ -63,7 +63,7 @@ namespace RegIN_Matckevich_Alikin.Elements
         {
             Random rnd = new Random();
 
-            for(int i = 0; i< 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 int back = rnd.Next(0, 10);
                 Label LCode = new Label()

@@ -8,21 +8,24 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Login"
       xmlns:uc="clr-namespace:RegIN_Matckevich_Alikin.Elements"
-      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-      TextElement.FontWeight="Regular"
-      TextElement.FontSize="13"
-      TextOptions.TextFormattingMode="Ideal"
-      TextOptions.TextRenderingMode="Auto"
-      Background="{DynamicResource MaterialDesignPaper}"
-      FontFamily="{DynamicResource MaterialDesignFont}">
-    
+      Background="White"
+      FontFamily="Segoe UI"
+      FontSize="13">
+
     <Grid>
-        <materialDesign:Card
+        <Border
             Height="400"
             VerticalAlignment="Center"
             HorizontalAlignment="Center"
-            Width="300">
+            Width="300"
+            Background="White"
+            BorderBrush="#E0E0E0"
+            BorderThickness="1"
+            CornerRadius="4">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" Opacity="0.1" BlurRadius="10" ShadowDepth="2"/>
+            </Border.Effect>
+
             <Grid>
                 <Image
                     x:Name="IUser"
@@ -31,7 +34,7 @@
                     Margin="32"
                     VerticalAlignment="Top"
                     Width="100"
-                    Source="/Images/ic-user.png">
+                    Source="/RegIN_Matckevich_Alikin;component/Images/ic-user.png">
                     <Image.Clip>
                         <EllipseGeometry
                             RadiusX="50"
@@ -39,16 +42,19 @@
                             Center="50, 50"/>
                     </Image.Clip>
                 </Image>
+
                 <Label
                     x:Name="LNameUser"
                     Margin="10,137,10,0"
                     HorizontalContentAlignment="Center"
                     Content=""
                     VerticalAlignment="Top"/>
+
                 <Label
                     Content="Enter login:"
                     Margin="10,161,10,0"
                     VerticalAlignment="Top"/>
+
                 <TextBox
                     x:Name="TbLogin"
                     Height="23" Margin="10,185,10,0"
@@ -57,22 +63,26 @@
                     VerticalAlignment="Top"
                     KeyUp="SetLogin"
                     LostFocus="SetLogin"/>
+
                 <uc:ElementCapture
                     x:Name="Capture"
                     HorizontalAlignment="Center"
                     Width="280"
                     Margin="10,213,10,0" Height="100"
                     VerticalAlignment="Top"/>
+
                 <Label
                     Content="Enter password:"
                     Margin="10,318,10,0"
                     VerticalAlignment="Top"/>
+
                 <PasswordBox
                     x:Name="TbPassword"
                     Margin="10,342,10,0"
                     VerticalAlignment="Top"
                     Height="26"
                     KeyUp="SetPassword"/>
+
                 <Label
                     Content="Forgot your password?"
                     Margin="10,373,0,0"
@@ -81,7 +91,9 @@
                     FontSize="10"
                     MouseDown="RecoveryPassword"
                     HorizontalAlignment="Left"
-                    Width="110"/>
+                    Width="110"
+                    Cursor="Hand"/>
+
                 <Label
                     Content="Registration"
                     Margin="0,373,10,0"
@@ -90,8 +102,9 @@
                     FontSize="10"
                     MouseDown="OpenRegin"
                     HorizontalAlignment="Right"
-                    Width="62"/>
+                    Width="62"
+                    Cursor="Hand"/>
             </Grid>
-        </materialDesign:Card>
+        </Border>
     </Grid>
 </Page>
