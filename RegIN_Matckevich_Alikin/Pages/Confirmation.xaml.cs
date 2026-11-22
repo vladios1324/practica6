@@ -62,6 +62,7 @@ namespace RegIN_Matckevich_Alikin.Pages
                 return;
 
             TbCode.IsEnabled = false;
+            PinCode.FailedAttempts = 0;
             if (ThisTypeConfirmation == TypeConfirmation.Login)
                 MessageBox.Show("Авторизация пользователя успешно подтверждена.");
             else
@@ -69,6 +70,8 @@ namespace RegIN_Matckevich_Alikin.Pages
                 MainWindow.mainWindow.UserLogin.SetUser();
                 MessageBox.Show("Регистрация пользователя успешно подтверждена.");
             }
+            if (MainWindow.mainWindow.UserLogin.PinCode == String.Empty)
+                MainWindow.mainWindow.OpenPage(new PinCode(PinCode.TypePin.Create));
         }
 
         private void OpenLogin(object sender, MouseButtonEventArgs e)

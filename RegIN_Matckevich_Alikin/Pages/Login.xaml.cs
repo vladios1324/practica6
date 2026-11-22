@@ -28,6 +28,9 @@ namespace RegIN_Matckevich_Alikin.Pages
 
         public void CorrectLogin()
         {
+            LPinLogin.Visibility = MainWindow.mainWindow.UserLogin.PinCode != String.Empty && PinCode.FailedAttempts < PinCode.MaxAttempts
+                ? Visibility.Visible
+                : Visibility.Collapsed;
             if (OldLogin != TbLogin.Text)
             {
                 UiHelper.SetNotification(LNameUser, "Hi, " + MainWindow.mainWindow.UserLogin.Name, Brushes.Black);
@@ -48,6 +51,7 @@ namespace RegIN_Matckevich_Alikin.Pages
 
         public void InCorrectLogin()
         {
+            LPinLogin.Visibility = Visibility.Collapsed;
             if (LNameUser.Content != "")
             {
                 LNameUser.Content = "";
@@ -156,6 +160,11 @@ namespace RegIN_Matckevich_Alikin.Pages
         private void OpenRegin(object sender, MouseButtonEventArgs e)
         {
             MainWindow.mainWindow.OpenPage(new Regin());
+        }
+
+        private void OpenPinLogin(object sender, MouseButtonEventArgs e)
+        {
+            MainWindow.mainWindow.OpenPage(new PinCode(PinCode.TypePin.Login));
         }
     }
 }

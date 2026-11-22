@@ -1,6 +1,8 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace RegIN_Matckevich_Alikin.Classes
 {
@@ -13,6 +15,8 @@ namespace RegIN_Matckevich_Alikin.Classes
         public byte[] Image = new byte[0];
         public DateTime DateUpdate { get; set; }
         public DateTime DateCreate { get; set; }
+        public string PinCode { get; set; } = String.Empty;
+
         public CorrectLogin HandlerCorrectLogin;
         public InCorrectLogin HandlerInCorrectLogin;
 
@@ -26,6 +30,7 @@ namespace RegIN_Matckevich_Alikin.Classes
             Password = String.Empty;
             Name = String.Empty;
             Image = new byte[0];
+            PinCode = String.Empty;
 
             MySqlConnection mySqlConnection = WorkingDB.OpenConnection();
 
@@ -48,6 +53,8 @@ namespace RegIN_Matckevich_Alikin.Classes
 
                         DateUpdate = userQuery.GetDateTime(5);
                         DateCreate = userQuery.GetDateTime(6);
+                        if (!userQuery.IsDBNull(7))
+                            PinCode = userQuery.GetString(7);
                         HandlerCorrectLogin.Invoke();
                     }
                     else
@@ -124,6 +131,32 @@ namespace RegIN_Matckevich_Alikin.Classes
             }
 
             return new string(NewPassword.ToArray());
+        }
+        string HashPin(string pin)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(Login + pin));
+                return BitConverter.ToString(hash).Replace("-", "");
+            }
+        }
+        public bool CheckPin(string pin)
+        {
+            return PinCode != String.Empty && PinCode == HashPin(pin);
+        }
+
+        public void SetPin(string pin)
+        {
+            PinCode = HashPin(pin);
+            MySqlConnection mySqlConnection = WorkingDB.OpenConnection();
+            if (WorkingDB.IsOpen(mySqlConnection))
+            {
+                MySqlCommand mySqlCommand = new MySqlCommand("UPDATE `users` SET `PinCode` = @PinCode WHERE `Login` = @Login", mySqlConnection);
+                mySqlCommand.Parameters.AddWithValue("@PinCode", PinCode);
+                mySqlCommand.Parameters.AddWithValue("@Login", Login);
+                mySqlCommand.ExecuteNonQuery();
+            }
+            WorkingDB.CloseConnection(mySqlConnection);
         }
     }
 }
