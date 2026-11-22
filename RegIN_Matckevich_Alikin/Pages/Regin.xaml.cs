@@ -169,7 +169,7 @@ namespace RegIN_Matckevich_Alikin.Pages
                     else
                     {
                         NewWidth = 256;
-                        NewHeight = (int)(image.Width * (256f / image.Height));
+                        NewHeight = (int)(image.Height * (256f / image.Width));
                     }
                     image.Resize(NewWidth, NewHeight);
                     image.Save("IUser.jpg");
