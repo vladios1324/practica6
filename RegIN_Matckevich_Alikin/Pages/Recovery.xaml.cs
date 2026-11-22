@@ -59,6 +59,7 @@ namespace RegIN_Matckevich_Alikin.Pages
 
         public void CorrectCapture()
         {
+            if (IsCapture) return;
             Capture.IsEnabled = false;
             IsCapture = true;
             SendNewPassword();
@@ -88,6 +89,11 @@ namespace RegIN_Matckevich_Alikin.Pages
         private void OpenLogin(object sender, MouseButtonEventArgs e)
         {
             MainWindow.mainWindow.OpenPage(new Login());
+        }
+
+        private void Capture_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

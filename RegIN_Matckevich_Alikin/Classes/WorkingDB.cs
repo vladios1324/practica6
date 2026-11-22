@@ -6,7 +6,7 @@ namespace RegIN_Matckevich_Alikin.Classes
 {
     public class WorkingDB
     {
-        readonly static string connection = "server=localhost;port=3307;database=regin;user=root;pwd=;";
+        readonly static string connection = "server=localhost;port=3306;database=regin;user=root;pwd=;";
 
         public static MySqlConnection OpenConnection()
         {

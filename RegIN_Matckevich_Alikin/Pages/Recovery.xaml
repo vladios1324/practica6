@@ -70,7 +70,7 @@
                     Width="280"
                     Margin="10,213,18,0"
                     Height="100"
-                    VerticalAlignment="Top"/>
+                    VerticalAlignment="Top" Loaded="Capture_Loaded"/>
 
                 <Label
                     Content="Back"

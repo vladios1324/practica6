@@ -21,6 +21,7 @@ namespace RegIN_Matckevich_Alikin.Pages
         public Login()
         {
             InitializeComponent();
+            CountSetPassword = 3;
             MainWindow.mainWindow.UserLogin.HandlerCorrectLogin += CorrectLogin;
             MainWindow.mainWindow.UserLogin.HandlerInCorrectLogin += InCorrectLogin;
             Capture.HandlerCorrectCapture += CorrectCapture;
@@ -108,7 +109,7 @@ namespace RegIN_Matckevich_Alikin.Pages
 
         public void BlockAutorization()
         {
-            DateTime StartBlock = DateTime.Now.AddMinutes(3);
+            DateTime StartBlock = DateTime.Now.AddMinutes(1);
 
             Dispatcher.Invoke(() =>
             {
@@ -117,7 +118,7 @@ namespace RegIN_Matckevich_Alikin.Pages
                 Capture.IsEnabled = false;
             });
 
-            for (int i = 0; i < 180; i++)
+            for (int i = 0; i < 60; i++)
             {
                 string timeLeft = StartBlock.Subtract(DateTime.Now).ToString(@"mm\:ss");
 
