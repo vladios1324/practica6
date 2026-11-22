@@ -34,8 +34,8 @@ namespace RegIN_Matckevich_Alikin.Classes
 
             if(WorkingDB.OpenConnection(mySqlConnection))
             {
-                MySqlDataReader userQuery = WorkingDB.Query($"SELECT * FROM `users` WHERE `Login` = '{Login}'", mySqlConnection);
-                if(userQuery.HasRows)
+                MySqlDataReader userQuery = WorkingDB.Query($"SELECT * FROM `users` WHERE `Login` = '{login}'", mySqlConnection);
+                if (userQuery.HasRows)
                 {
                     userQuery.Read();
                     this.Id = userQuery.GetInt32(0);

@@ -149,6 +149,9 @@ namespace RegIN_Matckevich_Alikin.Pages
             LNameUser.Foreground = _Color;
         }
 
-
+        private void OpenLogin(object sender, MouseButtonEventArgs e)
+        {
+            MainWindow.mainWindow.OpenPage(new Login());
+        }
     }
 }
