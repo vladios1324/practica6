@@ -28,6 +28,7 @@ namespace RegIN_Matckevich_Alikin
         {
             InitializeComponent();
             mainWindow = this;
+            OpenPage(new Pages.Login());
         }
 
         public void OpenPage(Page page)

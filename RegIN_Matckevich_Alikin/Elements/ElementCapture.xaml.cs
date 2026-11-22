@@ -28,6 +28,7 @@ namespace RegIN_Matckevich_Alikin.Elements
         public ElementCapture()
         {
             InitializeComponent();
+            CreateCapture();
         }
 
         public void CreateCapture()
