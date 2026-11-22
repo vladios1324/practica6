@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
 
 namespace RegIN_Matckevich_Alikin.Classes
 {
@@ -41,7 +36,7 @@ namespace RegIN_Matckevich_Alikin.Classes
             MySqlConnection.ClearPool(mySqlConnection);
         }
 
-        public static bool OpenConnection(MySqlConnection mySqlConnection)
+        public static bool IsOpen(MySqlConnection mySqlConnection)
         {
             return mySqlConnection != null && mySqlConnection.State == System.Data.ConnectionState.Open;
         }

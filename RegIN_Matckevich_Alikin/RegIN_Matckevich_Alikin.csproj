@@ -144,6 +144,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\SendMail.cs" />
+    <Compile Include="Classes\UiHelper.cs" />
     <Compile Include="Classes\User.cs" />
     <Compile Include="Classes\WorkingDB.cs" />
     <Compile Include="Elements\ElementCapture.xaml.cs">

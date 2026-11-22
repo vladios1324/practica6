@@ -1,18 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace RegIN_Matckevich_Alikin.Pages
 {
@@ -28,7 +18,7 @@ namespace RegIN_Matckevich_Alikin.Pages
         }
 
         TypeConfirmation ThisTypeConfirmation;
-        public int Code = 0;
+        private int Code = 0;
         public Confirmation(TypeConfirmation TypeConfirmation)
         {
             InitializeComponent();
@@ -66,29 +56,18 @@ namespace RegIN_Matckevich_Alikin.Pages
             SendMailCode();
         }
 
-        private void SetCode(object sender, KeyEventArgs e)
-        {
-            if (TbCode.Text.Length == 6)
-                SetCode();
-        }
-
         private void SetCode(object sender, RoutedEventArgs e)
         {
-            SetCode();
-        }
+            if (TbCode.Text != Code.ToString() || !TbCode.IsEnabled)
+                return;
 
-        void SetCode()
-        {
-            if(TbCode.Text == Code.ToString() && TbCode.IsEnabled == true)
+            TbCode.IsEnabled = false;
+            if (ThisTypeConfirmation == TypeConfirmation.Login)
+                MessageBox.Show("Авторизация пользователя успешно подтверждена.");
+            else
             {
-                TbCode.IsEnabled = false;
-                if (ThisTypeConfirmation == TypeConfirmation.Login)
-                    MessageBox.Show("Авторизация пользователя успешно подтверждена.");
-                else
-                {
-                    MainWindow.mainWindow.UserLogin.SetUser();
-                    MessageBox.Show("Регистрация пользователя успешно подтверждена.");
-                }
+                MainWindow.mainWindow.UserLogin.SetUser();
+                MessageBox.Show("Регистрация пользователя успешно подтверждена.");
             }
         }
 

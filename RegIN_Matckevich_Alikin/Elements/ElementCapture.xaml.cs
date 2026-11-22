@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace RegIN_Matckevich_Alikin.Elements
 {
@@ -23,8 +14,9 @@ namespace RegIN_Matckevich_Alikin.Elements
         public CorrectCapture HandlerCorrectCapture;
         public delegate void CorrectCapture();
         string StrCapture = "";
-        int ElementWidth = 280;
-        int ElementHeight = 50;
+        const int ElementWidth = 280;
+        const int ElementHeight = 50;
+        readonly Random rnd = new Random();
         public ElementCapture()
         {
             InitializeComponent();
@@ -37,12 +29,11 @@ namespace RegIN_Matckevich_Alikin.Elements
             Capture.Children.Clear();
             StrCapture = "";
             CreateBackground();
-            Background();
+            CreateCode();
         }
 
         void CreateBackground()
         {
-            Random rnd = new Random();
 
             for (int i = 0; i < 100; i++)
             {
@@ -59,9 +50,8 @@ namespace RegIN_Matckevich_Alikin.Elements
             }
         }
 
-        void Background()
+        void CreateCode()
         {
-            Random rnd = new Random();
 
             for (int i = 0; i < 4; i++)
             {

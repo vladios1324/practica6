@@ -1,23 +1,12 @@
-﻿using Org.BouncyCastle.Crypto.Paddings;
-using RegIN_Matckevich_Alikin.Classes;
+﻿using RegIN_Matckevich_Alikin.Classes;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace RegIN_Matckevich_Alikin.Pages
 {
@@ -39,34 +28,16 @@ namespace RegIN_Matckevich_Alikin.Pages
 
         public void CorrectLogin()
         {
-            if(OldLogin != TbLogin.Text)
+            if (OldLogin != TbLogin.Text)
             {
-                SetNotification("Hi, " + MainWindow.mainWindow.UserLogin.Name, Brushes.Black);
+                UiHelper.SetNotification(LNameUser, "Hi, " + MainWindow.mainWindow.UserLogin.Name, Brushes.Black);
 
                 try
                 {
-                    BitmapImage bitImg = new BitmapImage();
-                    MemoryStream ms = new MemoryStream(MainWindow.mainWindow.UserLogin.Image);
-                    bitImg.BeginInit();
-                    bitImg.StreamSource = ms;
-                    bitImg.EndInit();
-                    ImageSource imageSource = bitImg;
-                    DoubleAnimation StartAnimation = new DoubleAnimation();
-                    StartAnimation.From = 1;
-                    StartAnimation.To = 0;
-                    StartAnimation.Duration = TimeSpan.FromSeconds(0.6);
-                    StartAnimation.Completed += delegate
-                    {
-                        IUser.Source = imageSource;
-                        DoubleAnimation EndAnimation = new DoubleAnimation();
-                        EndAnimation.From = 0;
-                        EndAnimation.To = 1;
-                        EndAnimation.Duration = TimeSpan.FromSeconds(1.2);
-                        IUser.BeginAnimation(Image.OpacityProperty, EndAnimation);
-                    };
-                    IUser.BeginAnimation(Image.OpacityProperty, StartAnimation);
-                } 
-                catch(Exception exp)
+                    var imageSource = UiHelper.ToBitmap(MainWindow.mainWindow.UserLogin.Image);
+                    UiHelper.Fade(IUser, () => IUser.Source = imageSource);
+                }
+                catch (Exception exp)
                 {
                     Debug.WriteLine(exp.Message);
                 }
@@ -77,29 +48,15 @@ namespace RegIN_Matckevich_Alikin.Pages
 
         public void InCorrectLogin()
         {
-            if(LNameUser.Content != "")
+            if (LNameUser.Content != "")
             {
                 LNameUser.Content = "";
-                DoubleAnimation StartAnimation = new DoubleAnimation();
-                StartAnimation.From = 1;
-                StartAnimation.To = 0;
-                StartAnimation.Duration = TimeSpan.FromSeconds(0.6);
-                StartAnimation.Completed += delegate
-                {
-                    IUser.Source = new BitmapImage(new Uri("pack://application:,,,/Images/ic-user.png"));
-                    DoubleAnimation EndAnimation = new DoubleAnimation();
-                    EndAnimation.From = 0;
-                    EndAnimation.To = 1;
-                    EndAnimation.Duration = TimeSpan.FromSeconds(1.2);
-                    IUser.BeginAnimation(OpacityProperty, EndAnimation);
-                };
-                IUser.BeginAnimation(OpacityProperty, StartAnimation);
+                UiHelper.Fade(IUser, () =>
+                    IUser.Source = new BitmapImage(new Uri("pack://application:,,,/Images/ic-user.png")));
             }
 
-            if(TbLogin.Text.Length > 0)
-            {
-                SetNotification("Login is incorrect", Brushes.Red);
-            }
+            if (TbLogin.Text.Length > 0)
+                UiHelper.SetNotification(LNameUser, "Login is incorrect", Brushes.Red);
         }
 
         public void CorrectCapture()
@@ -128,7 +85,7 @@ namespace RegIN_Matckevich_Alikin.Pages
                     {
                         if (CountSetPassword > 0)
                         {
-                            SetNotification($"Password is incorrect, {CountSetPassword} attempts left", Brushes.Red);
+                            UiHelper.SetNotification(LNameUser, $"Password is incorrect, {CountSetPassword} attempts left", Brushes.Red);
                             CountSetPassword--;
                         }
                         else
@@ -141,7 +98,7 @@ namespace RegIN_Matckevich_Alikin.Pages
                     }
                 }
                 else
-                    SetNotification($"Enter capture", Brushes.Red);
+                    UiHelper.SetNotification(LNameUser, $"Enter capture", Brushes.Red);
             }
         }
 
@@ -156,20 +113,13 @@ namespace RegIN_Matckevich_Alikin.Pages
                 Capture.IsEnabled = false;
             });
 
-            for(int i = 0; i < 180; i++)
+            for (int i = 0; i < 180; i++)
             {
-                TimeSpan TimeIdle = StartBlock.Subtract(DateTime.Now);
-                string s_minutes = TimeIdle.Minutes.ToString();
-                if (TimeIdle.Minutes < 10)
-                    s_minutes = "0" + TimeIdle.Minutes;
-
-                string s_seconds = TimeIdle.Seconds.ToString();
-                if (TimeIdle.Seconds < 10)
-                    s_seconds = "0" + TimeIdle.Seconds;
+                string timeLeft = StartBlock.Subtract(DateTime.Now).ToString(@"mm\:ss");
 
                 Dispatcher.Invoke(() =>
                 {
-                    SetNotification($"Reauthorization available in: {s_minutes}:{s_seconds}", Brushes.Red);
+                    UiHelper.SetNotification(LNameUser, $"Reauthorization available in: {timeLeft}", Brushes.Red);
                 });
 
                 Thread.Sleep(1000);
@@ -177,7 +127,7 @@ namespace RegIN_Matckevich_Alikin.Pages
 
             Dispatcher.Invoke(() =>
             {
-                SetNotification("Hi, " + MainWindow.mainWindow.UserLogin.Name, Brushes.Black);
+                UiHelper.SetNotification(LNameUser, "Hi, " + MainWindow.mainWindow.UserLogin.Name, Brushes.Black);
                 TbLogin.IsEnabled = true;
                 TbPassword.IsEnabled = true;
                 Capture.IsEnabled = true;
@@ -187,29 +137,15 @@ namespace RegIN_Matckevich_Alikin.Pages
             });
         }
 
-        private void SetLogin(object sender, KeyEventArgs e)
-        {
-            if(e.Key == Key.Enter)
-            {
-                MainWindow.mainWindow.UserLogin.GetUserLogin(TbLogin.Text);
-
-                if (TbPassword.Password.Length > 0)
-                    SetPassword();
-            }
-        }
-
         private void SetLogin(object sender, RoutedEventArgs e)
         {
+            if (e is KeyEventArgs key && key.Key != Key.Enter)
+                return;
+
             MainWindow.mainWindow.UserLogin.GetUserLogin(TbLogin.Text);
 
             if (TbPassword.Password.Length > 0)
                 SetPassword();
-        }
-
-        public void SetNotification(string Message, SolidColorBrush _Color)
-        {
-            LNameUser.Content = Message;
-            LNameUser.Foreground = _Color;
         }
 
         private void RecoveryPassword(object sender, MouseButtonEventArgs e)

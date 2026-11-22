@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using RegIN_Matckevich_Alikin.Classes;
+using System;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace RegIN_Matckevich_Alikin.Pages
 {
@@ -37,30 +28,12 @@ namespace RegIN_Matckevich_Alikin.Pages
         {
             if (OldLogin != TbLogin.Text)
             {
-                SetNotification("Hi, " + MainWindow.mainWindow.UserLogin.Name, Brushes.Black);
+                UiHelper.SetNotification(LNameUser, "Hi, " + MainWindow.mainWindow.UserLogin.Name, Brushes.Black);
 
                 try
                 {
-                    BitmapImage bitImg = new BitmapImage();
-                    MemoryStream ms = new MemoryStream(MainWindow.mainWindow.UserLogin.Image);
-                    bitImg.BeginInit();
-                    bitImg.StreamSource = ms;
-                    bitImg.EndInit();
-                    ImageSource imageSource = bitImg;
-                    DoubleAnimation StartAnimation = new DoubleAnimation();
-                    StartAnimation.From = 1;
-                    StartAnimation.To = 0;
-                    StartAnimation.Duration = TimeSpan.FromSeconds(0.6);
-                    StartAnimation.Completed += delegate
-                    {
-                        IUser.Source = imageSource;
-                        DoubleAnimation EndAnimation = new DoubleAnimation();
-                        EndAnimation.From = 0;
-                        EndAnimation.To = 1;
-                        EndAnimation.Duration = TimeSpan.FromSeconds(1.2);
-                        IUser.BeginAnimation(Image.OpacityProperty, EndAnimation);
-                    };
-                    IUser.BeginAnimation(Image.OpacityProperty, StartAnimation);
+                    var imageSource = UiHelper.ToBitmap(MainWindow.mainWindow.UserLogin.Image);
+                    UiHelper.Fade(IUser, () => IUser.Source = imageSource);
                 }
                 catch (Exception exp)
                 {
@@ -68,7 +41,6 @@ namespace RegIN_Matckevich_Alikin.Pages
                 }
 
                 OldLogin = TbLogin.Text;
-                SendNewPassword();
             }
         }
 
@@ -77,26 +49,12 @@ namespace RegIN_Matckevich_Alikin.Pages
             if (LNameUser.Content != "")
             {
                 LNameUser.Content = "";
-                DoubleAnimation StartAnimation = new DoubleAnimation();
-                StartAnimation.From = 1;
-                StartAnimation.To = 0;
-                StartAnimation.Duration = TimeSpan.FromSeconds(0.6);
-                StartAnimation.Completed += delegate
-                {
-                    IUser.Source = new BitmapImage(new Uri("pack://application:,,,/Images/ic-user.png"));
-                    DoubleAnimation EndAnimation = new DoubleAnimation();
-                    EndAnimation.From = 0;
-                    EndAnimation.To = 1;
-                    EndAnimation.Duration = TimeSpan.FromSeconds(1.2);
-                    IUser.BeginAnimation(OpacityProperty, EndAnimation);
-                };
-                IUser.BeginAnimation(OpacityProperty, StartAnimation);
+                UiHelper.Fade(IUser, () =>
+                    IUser.Source = new BitmapImage(new Uri("pack://application:,,,/Images/ic-user.png")));
             }
 
             if (TbLogin.Text.Length > 0)
-            {
-                SetNotification("Login is incorrect", Brushes.Red);
-            }
+                UiHelper.SetNotification(LNameUser, "Login is incorrect", Brushes.Red);
         }
 
         public void CorrectCapture()
@@ -106,14 +64,11 @@ namespace RegIN_Matckevich_Alikin.Pages
             SendNewPassword();
         }
 
-        private void SetLogin(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-                MainWindow.mainWindow.UserLogin.GetUserLogin(TbLogin.Text);
-        }
-
         private void SetLogin(object sender, RoutedEventArgs e)
         {
+            if (e is KeyEventArgs key && key.Key != Key.Enter)
+                return;
+
             MainWindow.mainWindow.UserLogin.GetUserLogin(TbLogin.Text);
         }
 
@@ -123,30 +78,11 @@ namespace RegIN_Matckevich_Alikin.Pages
             {
                 if(MainWindow.mainWindow.UserLogin.Password != String.Empty)
                 {
-                    DoubleAnimation StartAnimation = new DoubleAnimation();
-                    StartAnimation.From = 1;
-                    StartAnimation.To = 0;
-                    StartAnimation.Duration = TimeSpan.FromSeconds(0.6);
-                    StartAnimation.Completed += delegate
-                    {
-                        IUser.Source = new BitmapImage(new Uri("pack://application:,,,/Images/ic-email.png"));
-                        DoubleAnimation EndAnimation = new DoubleAnimation();
-                        EndAnimation.From = 0;
-                        EndAnimation.To = 1;
-                        EndAnimation.Duration = TimeSpan.FromSeconds(1.2);
-                        IUser.BeginAnimation(OpacityProperty, EndAnimation);
-                    };
-                    IUser.BeginAnimation(OpacityProperty, StartAnimation);
-                    SetNotification("An email has been sent to your email.", Brushes.Black);
+                    UiHelper.Fade(IUser, () => IUser.Source = new BitmapImage(new Uri("pack://application:,,,/Images/ic-email.png")));
+                    UiHelper.SetNotification(LNameUser, "An email has been sent to your email.", Brushes.Black);
                     MainWindow.mainWindow.UserLogin.CreateNewPassword();
                 }
             }
-        }
-
-        public void SetNotification(string Message, SolidColorBrush _Color)
-        {
-            LNameUser.Content = Message;
-            LNameUser.Foreground = _Color;
         }
 
         private void OpenLogin(object sender, MouseButtonEventArgs e)

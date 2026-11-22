@@ -1,5 +1,4 @@
-﻿using Aspose.Imaging;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using RegIN_Matckevich_Alikin.Classes;
 using System;
 using System.IO;
@@ -7,9 +6,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 
 namespace RegIN_Matckevich_Alikin.Pages
@@ -24,6 +21,8 @@ namespace RegIN_Matckevich_Alikin.Pages
         bool BCorrectPassword = false;
         bool BCorrectConfirmPassword = false;
         bool BSetImages = false;
+        static readonly Regex LoginRegex = new Regex(@"([a-zA-Z0-9._-]{4,}@[a-zA-Z0-9._-]{2,}\.[a-zA-Z0-9_-]{2,})");
+        static readonly Regex PasswordRegex = new Regex(@"(?=.*[0-9])(?=.*[!@#$%^&?*\-_=])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&?*\-_=]{10,}");
         public Regin()
         {
             InitializeComponent();
@@ -36,91 +35,72 @@ namespace RegIN_Matckevich_Alikin.Pages
 
         private void CorrectLogin()
         {
-            SetNotification("Login already in use", Brushes.Red);
+            UiHelper.SetNotification(LNameUser, "Login already in use", Brushes.Red);
             BCorectLogin = false;
         }
 
         private void InCorrectLogin()
         {
-            SetNotification("", Brushes.Black);
+            UiHelper.SetNotification(LNameUser, "", Brushes.Black);
         }
 
-        public void SetNotification(string Message, SolidColorBrush _Color)
-        {
-            LNameUser.Content = Message;
-            LNameUser.Foreground = _Color;
-        }
 
-        private void SetLogin(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-                SetLogin();
-        }
 
         private void SetLogin(object sender, RoutedEventArgs e)
         {
-            SetLogin();
-        }
+            if (e is KeyEventArgs key && key.Key != Key.Enter)
+                return;
 
-        public void SetLogin()
-        {
-            Regex regex = new Regex(@"([a-zA-Z0-9._-]{4,}@[a-zA-Z0-9._-]{2,}\.[a-zA-Z0-9_-]{2,})");
-            BCorectLogin = regex.IsMatch(TbLogin.Text);
-            if (regex.IsMatch(TbLogin.Text) == true)
+            BCorectLogin = LoginRegex.IsMatch(TbLogin.Text);
+            if (BCorectLogin)
             {
-                SetNotification("", Brushes.Black);
+                UiHelper.SetNotification(LNameUser, "", Brushes.Black);
                 MainWindow.mainWindow.UserLogin.GetUserLogin(TbLogin.Text);
             }
             else
-                SetNotification("Invalid login", Brushes.Red);
+                UiHelper.SetNotification(LNameUser, "Invalid login", Brushes.Red);
+
             OnRegin();
         }
 
         private void SetPassword(object sender, RoutedEventArgs e)
         {
-            SetPassword();
-        }
+            if (e is KeyEventArgs key && key.Key != Key.Enter)
+                return;
 
-        private void SetPassword(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-                SetPassword();
+            SetPassword();
         }
 
         public void SetPassword()
         {
-            Regex regex = new Regex(@"(?=.*[0-9])(?=.*[!@#$%^&?*\-_=])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&?*\-_=]{10,}");
-            BCorrectPassword = regex.IsMatch(TbPassword.Password);
-            if (regex.IsMatch(TbPassword.Password) == true)
+            BCorrectPassword = PasswordRegex.IsMatch(TbPassword.Password);
+            if (BCorrectPassword)
             {
-                SetNotification("", Brushes.Black);
+                UiHelper.SetNotification(LNameUser, "", Brushes.Black);
                 if (TbConfirmPassword.Password.Length > 0)
                     ConfirmPassword(true);
                 OnRegin();
             }
             else
-                SetNotification("Invalid password", Brushes.Red);
-        }
-
-        private void ConfirmPassword(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-                ConfirmPassword();
+                UiHelper.SetNotification(LNameUser, "Invalid password", Brushes.Red);
         }
 
         private void ConfirmPassword(object sender, RoutedEventArgs e)
         {
+            if (e is KeyEventArgs key && key.Key != Key.Enter)
+                return;
+
             ConfirmPassword();
         }
 
         public void ConfirmPassword(bool Pass = false)
         {
             BCorrectConfirmPassword = TbConfirmPassword.Password == TbPassword.Password;
-            if (TbConfirmPassword.Password != TbPassword.Password)
-                SetNotification("Passwords do not match", Brushes.Red);
+            if (!BCorrectConfirmPassword)
+                UiHelper.SetNotification(LNameUser, "Passwords do not match", Brushes.Red);
             else
             {
-                SetNotification("", Brushes.Black);
+                UiHelper.SetNotification(LNameUser, "", Brushes.Black);
                 if (!Pass)
                     SetPassword();
             }
@@ -197,20 +177,7 @@ namespace RegIN_Matckevich_Alikin.Pages
                     rasterImage.Save("IUser.jpg");
                 }
 
-                DoubleAnimation StartAnimation = new DoubleAnimation();
-                StartAnimation.From = 1;
-                StartAnimation.To = 0;
-                StartAnimation.Duration = TimeSpan.FromSeconds(0.6);
-                StartAnimation.Completed += delegate
-                {
-                    IUser.Source = new BitmapImage(new Uri(Directory.GetCurrentDirectory() + @"\IUser.jpg"));
-                    DoubleAnimation EndAnimation = new DoubleAnimation();
-                    EndAnimation.From = 0;
-                    EndAnimation.To = 1;
-                    EndAnimation.Duration = TimeSpan.FromSeconds(1.2);
-                    IUser.BeginAnimation(System.Windows.Controls.Image.OpacityProperty, EndAnimation);
-                };
-                IUser.BeginAnimation(System.Windows.Controls.Image.OpacityProperty, StartAnimation);
+                UiHelper.Fade(IUser, () => IUser.Source = new BitmapImage(new Uri(Directory.GetCurrentDirectory() + @"\IUser.jpg")));
                 BSetImages = true;
             }
             else
